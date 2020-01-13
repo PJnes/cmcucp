@@ -25,7 +25,6 @@ def addmovie(title):
         errors.append(title)
         print("Failed to add %(title)s" % {'title': title })
     else:
-        item.markUnwatched()
         items.append(item)
         print("Added %(title)s" % {'title': title })
 
@@ -44,7 +43,6 @@ def addtv(show, season, episode, end = False):
             errors.append("%(show)s Season %(season)d Episode %(number)d" % values)
             print("Failed to add %(show)s Season %(season)s Episode %(number)s" % values)
         else:
-            item.markUnwatched()
             items.append(item)
             print("Added %(show)s Season %(season)s Episode %(number)s" % values)
 
