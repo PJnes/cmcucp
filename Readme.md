@@ -1,10 +1,14 @@
-# CMCUCP
-## The Complete Marvel Cinematic Universe Chronological Playlist
+# CMCUCP: The Complete Marvel Cinematic Universe Chronological Playlist
 
 This is a simple script that generates a Plex playlist with everything in your library from the MCU, in chronological order (according to [this page](https://www.digitalspy.com/movies/a825774/marvel-cinematic-universe-in-chronological-order/)).
 
 Fun fact: This is about 14 days of continuous video.
 
+## The new fancy docker way
+
+- `docker run --rm registry.gitlab.com/pjnes/cmcucp PLEX_USER PLEX_PASS PLEX_SERVER [PLEX_PLAYLIST]`
+
+## The old manual way
 ### Requirements
 - Python 3.
 - PIP.
@@ -20,5 +24,5 @@ Fun fact: This is about 14 days of continuous video.
 - Wait.
 - It will create a new playlist in your Plex library and report any items it couldn't find.
 
-### Issues?
+## Issues?
 - Runaways season 3 is missing from my source, so isn't included at the moment.
