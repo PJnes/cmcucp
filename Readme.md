@@ -14,15 +14,9 @@ Fun fact: This is about 14 days of continuous video.
 ### Setup
 - Clone this repo somewhere. Anywhere. Use your imagination.
 - Install the dependencies with `pip install -r requirements.txt`.
-- Create a config file with `cp example.config.ini config.ini`.
-- Edit the config file to add your Plex credentials.
-  - PLEX_USER is your Plex username/email.
-  - PLEX_PASS is your Plex password.
-  - PLEX_SERVER is the name of your Plex server.
-  - PLEX_PLAYLIST is the name to give your new MCU playlist.
 
 ### Usage
-- Just run `python cmcucp.py`.
+- Just run `python cmcucp.py PLEX_USER PLEX_PASS PLEX_SERVER`.
 - Wait.
 - It will create a new playlist in your Plex library and report any items it couldn't find.
 

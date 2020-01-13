@@ -1,7 +1,21 @@
-import configparser, math
+import math, sys
 from plexapi.myplex import MyPlexAccount
 from plexapi.playlist import Playlist
 from plexapi.exceptions import NotFound
+
+# Parse Arguments
+if len(sys.argv) < 4:
+    print("Arguments: PLEX_USER PLEX_PASS PLEX_SERVER [PLEX_PLAYLIST]")
+    exit(1)
+
+plex_user = sys.argv[1]
+plex_pass = sys.argv[2]
+plex_server = sys.argv[3]
+plex_playlist = "Complete MCU Chronological Playlist"
+
+if len(sys.argv) == 5:
+    plex_playlist = sys.argv[4]
+
 
 # Add a movie from plex to the playlist.
 def addmovie(title):
@@ -32,28 +46,21 @@ def addtv(show, season, episode, end = False):
             items.append(item)
             print("Added %(show)s Season %(season)s Episode %(number)s" % values)
 
-config = configparser.ConfigParser()
-try:
-    config.read("config.ini")
-except:
-    print("You need copy example.config.ini to config.ini and add your details")
-    exit()
-    
 # Login
 try:
-    account = MyPlexAccount(config['Plex']['Username'], config['Plex']['Password'])
-    plex = account.resource(config['Plex']['Server']).connect()
-    print("Logged in to %(server)s as %(user)s" % {'server': config['Plex']['Server'], 'user': config['Plex']['Username']})
+    account = MyPlexAccount(plex_user, plex_pass)
+    plex = account.resource(plex_server).connect()
+    print("Logged in to %(server)s as %(user)s" % {'server': plex_server, 'user': plex_user})
 except:
-    print("Failed to login to %(server)s as %(user)s" % {'server': config['Plex']['Server'], 'user': config['Plex']['Username']})
+    print("Failed to login to %(server)s as %(user)s" % {'server': plex_server, 'user': plex_user})
     exit()
 
 # Delete existing playlist
 try:
-    plex.playlist(config['Config']['Playlist']).delete()
-    print("Removing existing playlist called '%(playlist)s" % {'playlist': config['Config']['Playlist']})
+    plex.playlist(plex_playlist).delete()
+    print("Removing existing playlist called '%(playlist)s" % {'playlist': plex_playlist})
 except:
-    print("No existing playlist called '%(playlist)s" % {'playlist': config['Config']['Playlist']})
+    print("No existing playlist called '%(playlist)s" % {'playlist': plex_playlist})
 
 items = []
 errors = []
@@ -133,7 +140,7 @@ print("----------------------------------------------------")
 
 # Create playlist
 if len(items) > 0:
-    playlist = Playlist.create(plex, config['Config']['Playlist'], items)
+    playlist = Playlist.create(plex, plex_playlist, items)
 else:
     print("Script couldn't find any items to add to your MCU playlist")
     exit()
