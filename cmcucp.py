@@ -133,6 +133,7 @@ addmovie("Ant-Man and the Wasp")
 addmovie("Avengers: Infinity War")
 addtv("Agents of SHIELD", 5, 19, 22) # Concurrent with Infinity War
 addtv("Agents of SHIELD", 6, 1, 13) # takes place in Endgame's five-year time jump
+addtv("Runaways", 3, 1, 10)
 addmovie("Avengers: Endgame")
 addmovie("Spider-Man: Far From Home")
 
