@@ -70,7 +70,7 @@ errors = []
 addmovie("Captain America: The First Avenger")
 addtv("Agent Carter", 1, 1, 8)
 addtv("Agent Carter", 2, 1, 10)
-# Agent Carter (one-shot on Iron Man 3 DVD) 
+# Agent Carter (one-shot on Iron Man 3 DVD)
 addmovie("Captain Marvel")
 addmovie("Iron Man")
 addmovie("Iron Man 2")
@@ -94,7 +94,7 @@ addtv("Agents of SHIELD", 2, 1, 10)
 addtv("Jessica Jones", 1, 1, 13)
 addtv("Agents of SHIELD", 2, 11, 19)
 addmovie("Avengers: Age of Ultron")
-addtv("Agents of SHIELD", 1, 20, 22)
+addtv("Agents of SHIELD", 2, 20, 22)
 addtv("Daredevil", 2, 1, 4)
 addtv("Luke Cage", 1, 1, 4)
 addtv("Daredevil", 2, 5, 11)
@@ -102,7 +102,8 @@ addtv("Luke Cage", 1, 5, 8)
 addtv("Daredevil", 2, 12, 13)
 addtv("Luke Cage", 1, 9, 13)
 addmovie("Ant-Man")
-addtv("Agents of SHIELD", 3, 1, 19)
+addtv("Agents of SHIELD", 3, 1, 10)
+addtv("Agents of SHIELD", 3, 11, 19)
 addtv("Iron Fist", 1, 1, 13)
 addmovie("Captain America: Civil War")
 addtv("Agents of SHIELD", 3, 20, 22)
@@ -133,6 +134,7 @@ addmovie("Ant-Man and the Wasp")
 addmovie("Avengers: Infinity War")
 addtv("Agents of SHIELD", 5, 19, 22) # Concurrent with Infinity War
 addtv("Agents of SHIELD", 6, 1, 13) # takes place in Endgame's five-year time jump
+addtv("Agents of SHIELD", 7, 1, 13) # takes place in Endgame's five-year time jump
 addtv("Runaways", 3, 1, 10)
 addmovie("Avengers: Endgame")
 addmovie("Spider-Man: Far From Home")
@@ -152,10 +154,9 @@ time = "%(days)d days and %(hours)d hours" % { 'days': math.floor(hours / 24), '
 
 if len(errors) > 0:
     print("The following files could not be found to add to the playlist.")
-    for item in errors: 
+    for item in errors:
         print("- %(item)s" % { 'item': item })
     print("Run the script again once these items are in Plex.")
 
 print("----------------------------------------------------")
 print("Enjoy %(time)s of the MCU!" % {'time': time})
-
