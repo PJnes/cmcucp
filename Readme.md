@@ -6,7 +6,7 @@ Fun fact: This is about 14 days of continuous video.
 
 ## The new fancy docker way
 
-- `docker run --rm registry.gitlab.com/pjnes/cmcucp PLEX_USER PLEX_PASS PLEX_SERVER [PLEX_PLAYLIST]`
+- `docker run --rm ghcr.io/pjnes/cmcucp PLEX_USER PLEX_PASS PLEX_SERVER [PLEX_PLAYLIST]`
 
 ## The old manual way
 ### Requirements
@@ -23,6 +23,3 @@ Fun fact: This is about 14 days of continuous video.
 - Just run `python cmcucp.py PLEX_USER PLEX_PASS PLEX_SERVER`.
 - Wait.
 - It will create a new playlist in your Plex library and report any items it couldn't find.
-
-## Issues?
-- Runaways season 3 is missing from my source, so isn't included at the moment.
