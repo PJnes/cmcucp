@@ -1,0 +1,25 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Publish
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    env:
+      IMAGE_ID: ghcr.io/pjnes/cmcucp:latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Log into registry
+        run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Pull existing image for cache.
+        run: docker pull $IMAGE_ID || true
+      - name: Build docker image and push
+        run: |
+          docker build . -f Dockerfile --tag $IMAGE_ID --cache-from $IMAGE_ID
+          docker push $IMAGE_ID
