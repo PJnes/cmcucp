@@ -2,7 +2,7 @@
 
 This is a simple script that generates a Plex playlist with everything in your library from the MCU, in chronological order (according to [this page](https://www.digitalspy.com/movies/a825774/marvel-cinematic-universe-in-chronological-order/)).
 
-Fun fact: This is about 14 days of continuous video.
+Fun fact: This is about 15 days of continuous video.
 
 ## The new fancy docker way
 
