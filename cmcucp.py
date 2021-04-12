@@ -137,6 +137,8 @@ addtv("Agents of SHIELD", 6, 1, 13) # takes place in Endgame's five-year time ju
 addtv("Agents of SHIELD", 7, 1, 13) # takes place in Endgame's five-year time jump
 addtv("Runaways", 3, 1, 10)
 addmovie("Avengers: Endgame")
+addtv("WandaVision", 1, 1, 9)
+addtv("The Falcon and the Winter Soldier", 1, 1, 6)
 addmovie("Spider-Man: Far From Home")
 
 print("----------------------------------------------------")
