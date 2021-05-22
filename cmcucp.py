@@ -19,32 +19,39 @@ if len(sys.argv) == 5:
 
 # Add a movie from plex to the playlist.
 def addmovie(title):
-    try:
-        item = plex.library.section('Movies').get(title)
-    except NotFound:
-        errors.append(title)
-        print("Failed to add %(title)s" % {'title': title })
+    results = plex.library.search(title=title, libtype="movie")
+    if results:
+        # Just use the first result, this could be smarter.
+        items.append(results[0])
+        print("Added %(title)s" % {'title': title})
     else:
-        items.append(item)
-        print("Added %(title)s" % {'title': title })
+        errors.append(title)
+        print("Failed to add %(title)s" % {'title': title})
+
 
 # Add a TV show episode or range of episodes from plex to the playlist.
-def addtv(show, season, episode, end = False):
+def addtv(show, season, episode, end=False):
+    # Default to single episode if no end value.
     if not end:
         end = episode
     end = end + 1
-    show = "Marvel's %(show)s" % { 'show': show }
+
+    # Do some text replacement.
+    show = "Marvel's %(show)s" % {'show': show}
     show = show.replace("SHIELD", "S.H.I.E.L.D.")
+
+    results = plex.library.search(title=show, libtype="show")
     for number in range(episode, end):
-        values = { 'show': show, 'season': season, 'number': number}
+        values = {'show': show, 'season': season, 'number': number}
         try:
-            item = plex.library.section('TV Shows').get(show).episode(season=season, episode=number)
-        except NotFound:
+            item = results[0].episode(season=season, episode=number)
+        except (NotFound, IndexError):
             errors.append("%(show)s Season %(season)d Episode %(number)d" % values)
             print("Failed to add %(show)s Season %(season)s Episode %(number)s" % values)
         else:
             items.append(item)
             print("Added %(show)s Season %(season)s Episode %(number)s" % values)
+
 
 # Login
 try:
@@ -62,11 +69,12 @@ try:
 except:
     print("No existing playlist called '%(playlist)s" % {'playlist': plex_playlist})
 
+
 items = []
 errors = []
 
-# Order Source: https://www.digitalspy.com/movies/a825774/marvel-cinematic-universe-in-chronological-order/
 
+# Order Source: https://www.digitalspy.com/movies/a825774/marvel-cinematic-universe-in-chronological-order/
 addmovie("Captain America: The First Avenger")
 addtv("Agent Carter", 1, 1, 8)
 addtv("Agent Carter", 2, 1, 10)
@@ -152,12 +160,12 @@ else:
 
 # Get playlist duration
 hours = math.floor(playlist.duration / 1000 / 60 / 60)
-time = "%(days)d days and %(hours)d hours" % { 'days': math.floor(hours / 24), 'hours': hours % 24 }
+time = "%(days)d days and %(hours)d hours" % { 'days': math.floor(hours / 24), 'hours': hours % 24}
 
 if len(errors) > 0:
     print("The following files could not be found to add to the playlist.")
     for item in errors:
-        print("- %(item)s" % { 'item': item })
+        print("- %(item)s" % {'item': item})
     print("Run the script again once these items are in Plex.")
 
 print("----------------------------------------------------")
