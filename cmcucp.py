@@ -141,6 +141,7 @@ addtv("Marvel's Agents of S.H.I.E.L.D.", 6, 1, 13) # takes place in Endgame's fi
 addtv("Marvel's Agents of S.H.I.E.L.D.", 7, 1, 13) # takes place in Endgame's five-year time jump
 addtv("Marvel's Runaways", 3, 1, 10)
 addmovie("Avengers: Endgame")
+addtv("Loki", 1, 1, 6)
 addtv("WandaVision", 1, 1, 9)
 addtv("The Falcon and the Winter Soldier", 1, 1, 6)
 addmovie("Spider-Man: Far From Home")
