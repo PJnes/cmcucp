@@ -6,7 +6,7 @@ Fun fact: This is about 15 days of continuous video.
 
 I've created a web based version of this, that provides chonological playlists for the MCU, as well as Star Wars, Doctor Who, Star Trek and others.
 
-You should check out [Chronoplex](https://chronoplex.pauljones.io)
+You should check out [Chronoplex](https://chronoplex.app), it does a [prettier MCU chronological playlist](https://chronoplex.app/mcu)
 
 ## The new fancy docker way
 
