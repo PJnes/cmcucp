@@ -2,7 +2,7 @@
 
 This is a simple script that generates a Plex playlist with everything in your library from the MCU, in chronological order (according to [this page](https://www.digitalspy.com/movies/a825774/marvel-cinematic-universe-in-chronological-order/)).
 
-Fun fact: This is about 15 days of continuous video.
+Fun fact: This is about 17 days of continuous video.
 
 I've created a web based version of this, that provides chonological playlists for the MCU, as well as Star Wars, Doctor Who, Star Trek and others.
 
