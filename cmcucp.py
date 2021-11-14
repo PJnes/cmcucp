@@ -150,7 +150,7 @@ print("----------------------------------------------------")
 
 # Create playlist
 if len(items) > 0:
-    playlist = Playlist.create(plex, plex_playlist, items)
+    playlist = Playlist.create(plex, plex_playlist, items = items)
 else:
     print("Script couldn't find any items to add to your MCU playlist")
     exit()
