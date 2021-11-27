@@ -147,7 +147,9 @@ addtv("What If...?", 1, 1, 9)
 addtv("WandaVision", 1, 1, 9)
 addtv("The Falcon and the Winter Soldier", 1, 1, 6)
 addmovie("Shang-Chi and the Legend of the Ten Rings")
+addmovie("Eternals")
 addmovie("Spider-Man: Far From Home")
+addtv("Hawkeye", 1, 1, 6)
 
 print("----------------------------------------------------")
 
