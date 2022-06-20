@@ -1,0 +1,85 @@
+# This File contains the hole playlist
+# you can add item here by editing the line in the following format
+# add a movie by just adding the title
+# add a tv by adding the title, the season the first series and the last series
+# --> so "show;Marvel's Agent Carter, 1, 1, 8" will add the show "Marvel's Agent Carter" season 1 series 1 to series 8
+movie;Captain America: The First Avenger
+show;Marvel's Agent Carter, 1, 1, 8
+#show;Marvel's Agent Carter, 2, 1, 10
+#movie;Marvel One-Shot: Agent Carter
+#movie;Captain Marvel
+#movie;Iron Man
+#movie;Iron Man 2
+#movie;The Incredible Hulk
+#movie;Marvel One-Shot: Etwas Lustiges geschah auf dem Weg zu Thors Hammer
+#movie;Thor
+#movie;The Avengers
+#movie;Marvel One-Shot: Objekt 47
+#movie;Iron Man 3
+#movie;Marvel One-Shot: All Hail the King
+#show;Marvel's Agents of S.H.I.E.L.D., 1, 1, 7
+#movie;Thor: The Dark World
+#show;Marvel's Agents of S.H.I.E.L.D., 1, 8, 16
+#movie;Captain America: The Winter Soldier
+#show;Marvel's Agents of S.H.I.E.L.D., 1, 17, 22
+#movie;Guardians of the Galaxy
+#movie;Guardians of the Galaxy Vol. 2
+#show;Marvel's Daredevil, 1, 1, 13
+#show;Marvel's Agents of S.H.I.E.L.D., 2, 1, 10
+#show;Marvel's Jessica Jones, 1, 1, 13
+#show;Marvel's Agents of S.H.I.E.L.D., 2, 11, 19
+#movie;Avengers: Age of Ultron
+#show;Marvel's Agents of S.H.I.E.L.D., 2, 20, 22
+#show;Marvel's Daredevil, 2, 1, 4
+#show;Marvel's Luke Cage, 1, 1, 4
+#show;Marvel's Daredevil, 2, 5, 11
+#show;Marvel's Luke Cage, 1, 5, 8
+#show;Marvel's Daredevil, 2, 12, 13
+#show;Marvel's Luke Cage, 1, 9, 13
+#movie;Ant-Man
+#show;Marvel's Agents of S.H.I.E.L.D., 3, 1, 10
+#show;Marvel's Agents of S.H.I.E.L.D., 3, 11, 19
+#show;Marvel's Iron Fist, 1, 1, 13
+#movie;Captain America: Civil War
+#movie;Black Widow
+#show;Marvel's Agents of S.H.I.E.L.D., 3, 20, 22
+#show;Marvel's The Defenders, 1, 1, 8
+#show;Marvel's Agents of S.H.I.E.L.D., 4, 1, 6
+#movie;Doctor Strange
+#movie;Black Panther
+#show;Marvel's Agents of S.H.I.E.L.D., 4, 7, 8
+#show;Marvel's Agents of S.H.I.E.L.D., 4, 9, 22
+#movie;Spider-Man: Homecoming
+#movie;Thor: Ragnarok
+#show;Marvel's Inhumans, 1, 1, 8
+#show;Marvel's The Punisher, 1, 1, 13
+#show;Marvel's Runaways, 1, 1, 10
+#show;Marvel's Agents of S.H.I.E.L.D., 5, 1, 10 
+#show;Marvel's Jessica Jones, 2, 1, 13
+#show;Marvel's Agents of S.H.I.E.L.D., 5, 11, 18
+#show;Marvel's Cloak and Dagger, 1, 1, 10
+#show;Marvel's Cloak and Dagger, 2, 1, 10
+#show;Marvel's Luke Cage, 2, 1, 13
+#show;Marvel's Iron Fist, 2, 1, 10
+#show;Marvel's Daredevil, 3, 1, 13
+#show;Marvel's Runaways, 2, 1, 13
+#show;Marvel's The Punisher, 2, 1, 13
+#show;Marvel's Jessica Jones, 3, 1, 13
+#movie;Ant-Man and the Wasp
+#movie;Avengers: Infinity War
+#show;Marvel's Agents of S.H.I.E.L.D., 5, 19, 22 
+#show;Marvel's Agents of S.H.I.E.L.D., 6, 1, 13 
+#show;Marvel's Agents of S.H.I.E.L.D., 7, 1, 13 
+#show;Marvel's Runaways, 3, 1, 10
+#movie;Avengers: Endgame
+#show;Loki, 1, 1, 6
+#show;What If...?, 1, 1, 9
+#show;WandaVision, 1, 1, 9
+#show;The Falcon and the Winter Soldier, 1, 1, 6
+#movie;Shang-Chi and the Legend of the Ten Rings
+#movie;Eternals
+#movie;Spider-Man: Far From Home
+#show;Hawkeye, 1, 1, 6
+#show;Moon Knight, 1, 1, 6
+#movie;Doctor Strange in the Multiverse of Madness
+#show;Ms. Marvel, 1, 1, 6
