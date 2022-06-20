@@ -5,7 +5,7 @@
 # --> so "show;Marvel's Agent Carter, 1, 1, 8" will add the show "Marvel's Agent Carter" season 1 series 1 to series 8
 movie;Captain America: The First Avenger
 show;Marvel's Agent Carter, 1, 1, 8
-#show;Marvel's Agent Carter, 2, 1, 10
+show;Marvel's Agent Carter, 2, 1, 10
 #movie;Marvel One-Shot: Agent Carter
 #movie;Captain Marvel
 #movie;Iron Man
