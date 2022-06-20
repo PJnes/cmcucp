@@ -5,6 +5,10 @@ This is a simple script that generates a Plex playlist with everything in your l
 
 Fun fact: This is about 17 days of continuous video.
 
+## The new fancy docker way
+
+- `docker run --rm ghcr.io/cm86/cmcucp PLEX_USER PLEX_PASS PLEX_SERVER [PLEX_PLAYLIST]`
+
 ## The old manual way
 
 ### Requirements
