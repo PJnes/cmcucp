@@ -1,7 +1,9 @@
 import math, sys
+import collections
 from plexapi.myplex import MyPlexAccount
 from plexapi.playlist import Playlist
 from plexapi.exceptions import NotFound
+
 
 # Parse Arguments
 if len(sys.argv) < 4:
@@ -12,12 +14,35 @@ plex_user = sys.argv[1]
 plex_pass = sys.argv[2]
 plex_server = sys.argv[3]
 plex_playlist = "Complete MCU Chronological Playlist"
+playlist_exists = ""
+existingitems = ""
+existingitems_list = ""
+items = []
+searchitems = []
+errors = []
+searcherrors = []
 
 if len(sys.argv) == 5:
     plex_playlist = sys.argv[4]
 
+# read the playlist from file
+def readplaylistfromfile():
+  with open("./mcuchronologicalplaylist.txt", "r") as f:
+    global playlistfile 
+    playlistfile = []
+    for playlistfileitem in f:
+        number = 0
+        while number == 0:
+          if playlistfileitem.startswith("#"):
+#            print(" skipping line" + playlistfileitem)
+            number += 1
+          else:
+            playlistfile.append(playlistfileitem.rstrip('\n'))
+            number += 1
+#    print (*playlistfile, sep = "\n")
 
-# Add a movie from plex to the playlist.
+readplaylistfromfile()
+# search a movie from plex to the playlist.
 def addmovie(title):
     results = plex.library.search(title=title, libtype="movie")
     if results:
@@ -29,7 +54,7 @@ def addmovie(title):
         print("Failed to add %(title)s" % {'title': title})
 
 
-# Add a TV show episode or range of episodes from plex to the playlist.
+# search a TV show episode or range of episodes from plex to the playlist.
 def addtv(show, season, episode, end=False):
     # Default to single episode if no end value.
     if not end:
@@ -47,128 +72,224 @@ def addtv(show, season, episode, end=False):
         else:
             items.append(item)
             print("Added %(show)s Season %(season)s Episode %(number)s" % values)
+            
+def searchmovie(title):
+    results = plex.library.search(title=title, libtype="movie")
+    if results:
+        # Just use the first result, this could be smarter.
+        searchitems.append(results[0])
+        print("Found '%(title)s' on Plex." % {'title': title})
+    else:
+        searcherrors.append(title)
+        print("Didn't found '%(title)s' on Plex" % {'title': title})
+def searchtv(show, season, episode, end=False):
+    # Default to single episode if no end value.
+    if not end:
+        end = episode
+    end = end + 1
 
+    results = plex.library.search(title=show, libtype="show")
+    for number in range(episode, end):
+        values = {'show': show, 'season': season, 'number': number}
+        try:
+            item = results[0].episode(season=season, episode=number)
+        except (NotFound, IndexError):
+            searcherrors.append("%(show)s Season %(season)d Episode %(number)d" % values)
+            print("Didn't found '%(show)s Season %(season)s Episode %(number)s' on Plex." % values)
+        else:
+            searchitems.append(item)
+            print("Found '%(show)s Season %(season)s Episode %(number)s' on Plex." % values)
+            
+def user_prompt(question: str) -> bool:
+    """ Prompt the yes/no-*question* to the user. """
+    from distutils.util import strtobool
+    while True:
+        user_input = input(question + " [y/n]: ")
+        try:
+            return bool(strtobool(user_input))
+        except ValueError:
+            print("Please use y/n or yes/no.\n")
+
+def addTrackToPlaylist(playlist, title):
+    playlist = plex.playlist(playlist)
+    track = plex.fetchItem(title)
+    playlist.addItems(track)
+    print(f"added {track} to playlist {playlist}")
+    
+def moveItemafter(playlist, title, after, countcurrent, countall):
+    playlist = plex.playlist(playlist)
+    track = plex.fetchItem(title)
+    trackafter = plex.fetchItem(after)
+    playlist.moveItem(track, trackafter)
+    print(f"{countcurrent} / {countall} ordered {track} in playlist '{plex_playlist}' after {trackafter}")
+
+def removeTrackfromPlaylist(playlist, title):
+    playlist = plex.playlist(playlist)
+    track = plex.fetchItem(title)
+    playlist.removeItems(track)
+    print(f"removed {track} from playlist {playlist}")
 
 # Login
 try:
     account = MyPlexAccount(plex_user, plex_pass)
     plex = account.resource(plex_server).connect()
+    print ("\n")
     print("Logged in to %(server)s as %(user)s" % {'server': plex_server, 'user': plex_user})
 except:
+    print ("\n")
     print("Failed to login to %(server)s as %(user)s" % {'server': plex_server, 'user': plex_user})
     exit()
 
 # Delete existing playlist
 try:
-    plex.playlist(plex_playlist).delete()
-    print("Removing existing playlist called '%(playlist)s" % {'playlist': plex_playlist})
+    for playlist in plex.playlists():
+      if playlist.title == plex_playlist:
+        print ("Playlist exists called '" + playlist.title +"'")
+        playlist_exists = "yes"
+        break
 except:
-    print("No existing playlist called '%(playlist)s" % {'playlist': plex_playlist})
+    print("No existing playlist called '%(playlist)s'" % {'playlist': plex_playlist})
 
+#when the playlist exist, update it if needed
 
-items = []
-errors = []
+if playlist_exists == "yes":
+  for playlist in plex.playlists():
+    if playlist.title == plex_playlist:
+      existingitems = playlist.items()
+      break
+  print ("Searching for Playlist - Items on Plex.")
+  print ("Source: https://www.digitalspy.com/movies/a825774/marvel-cinematic-universe-in-chronological-order/")
+  d = 0
+  while d < len(playlistfile):
+          splitplaylistfile = str(playlistfile[d]).split(";")
+          d = d + 1
+          if splitplaylistfile[0] == "movie":
+            searchmovie( splitplaylistfile[1])
+          else:
+            if splitplaylistfile[0] == "show":
+              splitplaylistfileshow = str(splitplaylistfile[1]).split(",")
+              searchtv( splitplaylistfileshow[0], int(splitplaylistfileshow[1]), int(splitplaylistfileshow[2]), int(splitplaylistfileshow[3]))
+            else:
+              print ("This line doesn't contain a categorisation (movie/show) --> " + str(splitplaylistfile)) 
+  print("Comparing Playlist-Items")
+  unique = [i for i in searchitems if i not in existingitems]
+  tomuchinplaylist = ""
+  if(collections.Counter(searchitems)!=collections.Counter(existingitems)) and (len(unique)==0):
+    unique = [i for i in existingitems if i not in searchitems]
+    tomuchinplaylist = "yes"
+  if (len(unique) > 0 ) and (tomuchinplaylist == ""):
+    print ("The following items have been found in your libraries, but aren't in your playlist '" + plex_playlist +"':")
+    print (*unique, sep = "\n")
+    if user_prompt("Do you wan't to add and order them now (could take a few minutes)?"):
+      i = 0
+      while i < len(unique):
+        splitunique = str(unique[i]).split(":")
+        i = i + 1
+        addTrackToPlaylist(plex_playlist, int(splitunique[1]))
+      for playlist in plex.playlists():
+        if playlist.title == plex_playlist:
+          existingitems = playlist.items()
+          break
+      if existingitems == searchitems:
+        print ("They are already in the right order.")
+      else:
+        j = 1
+        k = 0
+        while j < len(searchitems):
+          splitsearchitems = str(searchitems[j]).split(":")
+          k = j -1
+          splitsearchitems_minus_one =  str(searchitems[k]).split(":")
+          moveItemafter(plex_playlist, int(splitsearchitems[1]), int(splitsearchitems_minus_one[1]), j, len(searchitems))
+          j = j +1
+    else:
+      print ("Then you can just add and order them manually to the playlist.")  
+  
+  elif (len(unique) > 0 ) and (tomuchinplaylist == "yes"):
+    print ("The following items have been found in your playlist '" + plex_playlist +"', but aren't in our list:")
+    print (*unique, sep = "\n")
+    if user_prompt("Do you wan't to remove and order them now (could take a few minutes)?"):
+      i = 0
+      while i < len(unique):
+        splitunique = str(unique[i]).split(":")
+        i = i + 1
+        removeTrackfromPlaylist(plex_playlist, int(splitunique[1]))
+      print ("Order Playlist")
+      if existingitems == searchitems:
+        print ("They are already in the right order.")
+      else:      
+        j = 1
+        k = 0
+        while j < len(searchitems):
+          splitsearchitems = str(searchitems[j]).split(":")
+          k = j -1
+          splitsearchitems_minus_one =  str(searchitems[k]).split(":")
+          moveItemafter(plex_playlist, int(splitsearchitems[1]), int(splitsearchitems_minus_one[1]), j, len(searchitems))
+          j = j +1
+    else:
+      print ("Then you can just add and order them manually to the playlist.")  
+  
+  else:
+    print ("The Playlist is up to date.")
+    if user_prompt("Do you wan't check the order right now? (could take a few minutes)"):
+      print ("Order Playlist")
+      if existingitems == searchitems:
+        print ("They are already in the right order.")
+        exit();
+      else:
+        exit();
+        j = 1
+        k = 0
+        while j < len(searchitems):
+          splitsearchitems = str(searchitems[j]).split(":")
+          k = j -1
+          splitsearchitems_minus_one =  str(searchitems[k]).split(":")
+          moveItemafter(plex_playlist, int(splitsearchitems[1]), int(splitsearchitems_minus_one[1]), j, len(searchitems))
+          j = j +1
+    else:
+      print("Thanks - Bye")
 
+#### When the playlist doesn't exist, then create new
 
-# Order Source: https://www.digitalspy.com/movies/a825774/marvel-cinematic-universe-in-chronological-order/
-addmovie("Captain America: The First Avenger")
-addtv("Marvel's Agent Carter", 1, 1, 8)
-addtv("Marvel's Agent Carter", 2, 1, 10)
-# Agent Carter (one-shot on Iron Man 3 DVD)
-addmovie("Captain Marvel")
-addmovie("Iron Man")
-addmovie("Iron Man 2")
-addmovie("The Incredible Hulk")
-# The Consultant (one-shot on the Thor DVD)
-# A Funny Thing Happened on the Way to Thor's Hammer (one-shot on the Captain America: The First Avenger DVD)
-addmovie("Thor")
-addmovie("The Avengers")
-# Item 47 (one-shot on the Avengers Assemble DVD)
-addmovie("Iron Man 3")
-# All Hail the King (one-shot on the Thor: The Dark World DVD)
-addtv("Marvel's Agents of S.H.I.E.L.D.", 1, 1, 7)
-addmovie("Thor: The Dark World")
-addtv("Marvel's Agents of S.H.I.E.L.D.", 1, 8, 16)
-addmovie("Captain America: The Winter Soldier")
-addtv("Marvel's Agents of S.H.I.E.L.D.", 1, 17, 22)
-addmovie("Guardians of the Galaxy")
-addmovie("Guardians of the Galaxy Vol. 2")
-addtv("Marvel's Daredevil", 1, 1, 13)
-addtv("Marvel's Agents of S.H.I.E.L.D.", 2, 1, 10)
-addtv("Marvel's Jessica Jones", 1, 1, 13)
-addtv("Marvel's Agents of S.H.I.E.L.D.", 2, 11, 19)
-addmovie("Avengers: Age of Ultron")
-addtv("Marvel's Agents of S.H.I.E.L.D.", 2, 20, 22)
-addtv("Marvel's Daredevil", 2, 1, 4)
-addtv("Marvel's Luke Cage", 1, 1, 4)
-addtv("Marvel's Daredevil", 2, 5, 11)
-addtv("Marvel's Luke Cage", 1, 5, 8)
-addtv("Marvel's Daredevil", 2, 12, 13)
-addtv("Marvel's Luke Cage", 1, 9, 13)
-addmovie("Ant-Man")
-addtv("Marvel's Agents of S.H.I.E.L.D.", 3, 1, 10)
-addtv("Marvel's Agents of S.H.I.E.L.D.", 3, 11, 19)
-addtv("Marvel's Iron Fist", 1, 1, 13)
-addmovie("Captain America: Civil War")
-addmovie("Black Widow")
-addtv("Marvel's Agents of S.H.I.E.L.D.", 3, 20, 22)
-addtv("Marvel's The Defenders", 1, 1, 8)
-addtv("Marvel's Agents of S.H.I.E.L.D.", 4, 1, 6)
-addmovie("Doctor Strange")
-addmovie("Black Panther")
-addtv("Marvel's Agents of S.H.I.E.L.D.", 4, 7, 8)
-# Marvel's Agents of S.H.I.E.L.D.: Slingshot (season 1, eps 1-6)
-addtv("Marvel's Agents of S.H.I.E.L.D.", 4, 9, 22)
-addmovie("Spider-Man: Homecoming")
-addmovie("Thor: Ragnarok")
-addtv("Marvel's Inhumans", 1, 1, 8)
-addtv("Marvel's The Punisher", 1, 1, 13)
-addtv("Marvel's Runaways", 1, 1, 10)
-addtv("Marvel's Agents of S.H.I.E.L.D.", 5, 1, 10) # allowing for time travel craziness
-addtv("Marvel's Jessica Jones", 2, 1, 13)
-addtv("Marvel's Agents of S.H.I.E.L.D.", 5, 11, 18)
-addtv("Marvel's Cloak & Dagger", 1, 1, 10)
-addtv("Marvel's Cloak & Dagger", 2, 1, 10)
-addtv("Marvel's Luke Cage", 2, 1, 13)
-addtv("Marvel's Iron Fist", 2, 1, 10)
-addtv("Marvel's Daredevil", 3, 1, 13)
-addtv("Marvel's Runaways", 2, 1, 13)
-addtv("Marvel's The Punisher", 2, 1, 13)
-addtv("Marvel's Jessica Jones", 3, 1, 13)
-addmovie("Ant-Man and the Wasp")
-addmovie("Avengers: Infinity War")
-addtv("Marvel's Agents of S.H.I.E.L.D.", 5, 19, 22) # Concurrent with Infinity War
-addtv("Marvel's Agents of S.H.I.E.L.D.", 6, 1, 13) # takes place in Endgame's five-year time jump
-addtv("Marvel's Agents of S.H.I.E.L.D.", 7, 1, 13) # takes place in Endgame's five-year time jump
-addtv("Marvel's Runaways", 3, 1, 10)
-addmovie("Avengers: Endgame")
-addtv("Loki", 1, 1, 6)
-addtv("What If...?", 1, 1, 9)
-addtv("WandaVision", 1, 1, 9)
-addtv("The Falcon and the Winter Soldier", 1, 1, 6)
-addmovie("Shang-Chi and the Legend of the Ten Rings")
-addmovie("Eternals")
-addmovie("Spider-Man: Far From Home")
-addtv("Hawkeye", 1, 1, 6)
-
-print("----------------------------------------------------")
-
+if playlist_exists == "":
+  print("No existing playlist called '%(playlist)s'" % {'playlist': plex_playlist})
+  print ("Add Playlist called '"+ plex_playlist)
+  print ("Source: https://www.digitalspy.com/movies/a825774/marvel-cinematic-universe-in-chronological-order/")
+  print("----------------------------------------------------")
 # Create playlist
-if len(items) > 0:
-    playlist = Playlist.create(plex, plex_playlist, items = items)
-else:
+  d = 0
+  while d < len(playlistfile):
+          splitplaylistfile = str(playlistfile[d]).split(";")
+          d = d + 1
+          if splitplaylistfile[0] == "movie":
+            searchmovie( splitplaylistfile[1])
+          else:
+            if splitplaylistfile[0] == "show":
+              splitplaylistfileshow = str(splitplaylistfile[1]).split(",")
+              searchtv( splitplaylistfileshow[0], int(splitplaylistfileshow[1]), int(splitplaylistfileshow[2]), int(splitplaylistfileshow[3]))
+            else:
+              print ("This line doesn't contain a categorisation (movie/show) --> " + str(splitplaylistfile))
+  if len(searchitems) > 0:
+    playlist = Playlist.create(plex, plex_playlist, items = searchitems)
+  else:
     print("Script couldn't find any items to add to your MCU playlist")
     exit()
-
 # Get playlist duration
 hours = math.floor(playlist.duration / 1000 / 60 / 60)
 time = "%(days)d days and %(hours)d hours" % { 'days': math.floor(hours / 24), 'hours': hours % 24}
 
 if len(errors) > 0:
-    print("The following files could not be found to add to the playlist.")
+    print("The following files could not be found in your libraries to add to the playlist.")
     for item in errors:
+        print("- %(item)s" % {'item': item})
+    print("Run the script again once these items are in Plex.")
+if len(searcherrors) > 0:
+    print ("\n")
+    print("The following files could not be found in your libraries to add to the playlist.")
+    for item in searcherrors:
         print("- %(item)s" % {'item': item})
     print("Run the script again once these items are in Plex.")
 
 print("----------------------------------------------------")
 print("Enjoy %(time)s of the MCU!" % {'time': time})
+print ("\n")
+
