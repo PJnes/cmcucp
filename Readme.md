@@ -1,7 +1,7 @@
 # CMCUCP: The Complete Marvel Cinematic Universe Chronological Playlist
 ## This is fork of the repository from [PJnes / cmcucp](https://github.com/PJnes/cmcucp)
 
-I have modified the original one with this automatics:
+I have modified the original one with this mechanics:
 - outsourcing of playlist to file (mcuchronologicalplaylist.txt) --> make editing easier
 - if there is no playlist with the name you choosed --> it creates the playlist
 - if there is already a playlist with the same name --> it looks inside the playlist and gives you the choice
