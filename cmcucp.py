@@ -172,7 +172,7 @@ if playlist_exists == "yes":
             else:
               print ("This line doesn't contain a categorisation (movie/show) --> " + str(splitplaylistfile)) 
   print("Comparing Playlist-Items")
-  unique = [i for i in searchitems if i not in existingitems]
+  unique = [i for i in existingitems if i not in searchitems]
   tomuchinplaylist = ""
   if(collections.Counter(searchitems)!=collections.Counter(existingitems)) and (len(unique)==0):
     unique = [i for i in existingitems if i not in searchitems]
