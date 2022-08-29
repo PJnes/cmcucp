@@ -1,1 +1,1 @@
-PlexAPI==4.11.2
+PlexAPI==4.13.0
